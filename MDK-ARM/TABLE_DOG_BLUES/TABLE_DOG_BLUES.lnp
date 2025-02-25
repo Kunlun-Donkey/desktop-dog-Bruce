@@ -1,0 +1,27 @@
+--cpu Cortex-M3
+"table_dog_blues\startup_stm32f103xb.o"
+"table_dog_blues\main.o"
+"table_dog_blues\gpio.o"
+"table_dog_blues\tim.o"
+"table_dog_blues\usart.o"
+"table_dog_blues\stm32f1xx_it.o"
+"table_dog_blues\stm32f1xx_hal_msp.o"
+"table_dog_blues\stm32f1xx_hal_gpio_ex.o"
+"table_dog_blues\stm32f1xx_hal_tim.o"
+"table_dog_blues\stm32f1xx_hal_tim_ex.o"
+"table_dog_blues\stm32f1xx_hal.o"
+"table_dog_blues\stm32f1xx_hal_rcc.o"
+"table_dog_blues\stm32f1xx_hal_rcc_ex.o"
+"table_dog_blues\stm32f1xx_hal_gpio.o"
+"table_dog_blues\stm32f1xx_hal_dma.o"
+"table_dog_blues\stm32f1xx_hal_cortex.o"
+"table_dog_blues\stm32f1xx_hal_pwr.o"
+"table_dog_blues\stm32f1xx_hal_flash.o"
+"table_dog_blues\stm32f1xx_hal_flash_ex.o"
+"table_dog_blues\stm32f1xx_hal_exti.o"
+"table_dog_blues\stm32f1xx_hal_uart.o"
+"table_dog_blues\system_stm32f1xx.o"
+--strict --scatter "TABLE_DOG_BLUES\TABLE_DOG_BLUES.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "TABLE_DOG_BLUES.map" -o TABLE_DOG_BLUES\TABLE_DOG_BLUES.axf
