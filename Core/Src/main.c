@@ -92,7 +92,9 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  OLED_Init();
+  OLED_Clear();
+  OLED_ShowString(0, 0, "Hello, OLED!");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,7 +103,7 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+    /* Test GPIOB0 LED, Set hight level */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
     /* USER CODE END 3 */
   }
