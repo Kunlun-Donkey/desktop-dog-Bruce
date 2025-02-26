@@ -81,3 +81,19 @@ void OLED_ShowChar(uint8_t x, uint8_t y, char chr) {
 void OLED_ShowString(uint8_t x, uint8_t y, char *chr) {
     // Implement string display function
 }
+
+void OLED_ShowImage(uint8_t x, uint8_t y, const uint8_t *image, uint8_t width, uint8_t height) {
+    for (uint8_t i = 0; i < height / 8; i++) {
+        OLED_Set_Pos(x, y + i);
+        for (uint8_t j = 0; j < width; j++) {
+            OLED_Write_Data(image[i * width + j]);
+        }
+    }
+}
+
+void OLED_ShowGIF(const uint8_t **frames, uint8_t frame_count, uint8_t width, uint8_t height, uint16_t delay) {
+    for (uint8_t i = 0; i < frame_count; i++) {
+        OLED_ShowImage(0, 0, frames[i], width, height);
+        HAL_Delay(delay);
+    }
+}

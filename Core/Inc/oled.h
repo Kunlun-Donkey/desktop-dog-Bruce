@@ -2,9 +2,9 @@
  * @Author: luojialei luojialei@jiqid.com
  * @Date: 2025-02-26 10:55:42
  * @LastEditors: luojialei luojialei@jiqid.com
- * @LastEditTime: 2025-02-26 10:57:14
+ * @LastEditTime: 2025-02-26 20:28:06
  * @FilePath: \desktop-dog-Bruce\Core\Inc\oled.h
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: oled.h
  */
 #ifndef __OLED_H__
 #define __OLED_H__
@@ -26,6 +26,8 @@ void OLED_Display_Off(void);
 void OLED_Set_Pos(uint8_t x, uint8_t y);
 void OLED_ShowChar(uint8_t x, uint8_t y, char chr);
 void OLED_ShowString(uint8_t x, uint8_t y, char *chr);
+void OLED_ShowImage(uint8_t x, uint8_t y, const uint8_t *image, uint8_t width, uint8_t height);
+void OLED_ShowGIF(const uint8_t **frames, uint8_t frame_count, uint8_t width, uint8_t height, uint16_t delay);
 
 #ifdef __cplusplus
 }
