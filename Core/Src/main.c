@@ -21,6 +21,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "oled.h"          // 添加此行
 #include "oled_images.h"
 #include "servo.h"
 
