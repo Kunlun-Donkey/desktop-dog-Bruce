@@ -22,6 +22,7 @@
 #include "usart.h"
 #include "gpio.h"
 #include "oled_images.h"
+#include "servo.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -96,6 +97,15 @@ int main(void)
   OLED_Init();
   OLED_Clear();
   OLED_ShowString(0, 0, "Hello, OLED!");
+
+  // 初始化舵机
+  Servo_Init();
+
+  // 设置舵机角度
+  Servo_SetAngle(&htim2, TIM_CHANNEL_1, 90);
+  Servo_SetAngle(&htim2, TIM_CHANNEL_2, 45);
+  Servo_SetAngle(&htim2, TIM_CHANNEL_3, 135);
+  Servo_SetAngle(&htim2, TIM_CHANNEL_4, 180);
 
   /* USER CODE BEGIN Demo */
   // 显示图片

@@ -25,6 +25,15 @@
 extern "C" {
 #endif
 
+/*
+PA0-WKUP (TIM2_CH1)
+PA1 (TIM2_CH2)
+PA2 (TIM2_CH3)
+PA3 (TIM2_CH4)
+*/
+
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
