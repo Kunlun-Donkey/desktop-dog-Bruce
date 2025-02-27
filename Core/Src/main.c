@@ -21,6 +21,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "oled_images.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -92,6 +93,17 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  OLED_Init();
+  OLED_Clear();
+  OLED_ShowString(0, 0, "Hello, OLED!");
+
+  /* USER CODE BEGIN Demo */
+  // 显示图片
+  OLED_ShowImage(0, 2, image_data, 128, 64);
+
+  // 显示GIF
+  // OLED_ShowGIF(gif_frames, 2, 128, 64, 500);
+  /* USER CODE END Demo */
 
   /* USER CODE END 2 */
 
