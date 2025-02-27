@@ -1,19 +1,26 @@
 #include "oled.h"
-#include "i2c.h"
+#include "soft_i2c.h"
 
 // Send command to OLED
 static void OLED_Write_Command(uint8_t command) {
-    uint8_t data[2] = {0x00, command};
-    HAL_I2C_Master_Transmit(&hi2c1, OLED_I2C_ADDRESS, data, 2, HAL_MAX_DELAY);
+    Soft_I2C_Start();
+    Soft_I2C_Write(OLED_I2C_ADDRESS);
+    Soft_I2C_Write(0x00);
+    Soft_I2C_Write(command);
+    Soft_I2C_Stop();
 }
 
 // Send data to OLED
 static void OLED_Write_Data(uint8_t data) {
-    uint8_t data_array[2] = {0x40, data};
-    HAL_I2C_Master_Transmit(&hi2c1, OLED_I2C_ADDRESS, data_array, 2, HAL_MAX_DELAY);
+    Soft_I2C_Start();
+    Soft_I2C_Write(OLED_I2C_ADDRESS);
+    Soft_I2C_Write(0x40);
+    Soft_I2C_Write(data);
+    Soft_I2C_Stop();
 }
 
 void OLED_Init(void) {
+    Soft_I2C_Init();
     // Initialization sequence for SSD1306
     OLED_Write_Command(0xAE); // Display off
     OLED_Write_Command(0x20); // Set Memory Addressing Mode
