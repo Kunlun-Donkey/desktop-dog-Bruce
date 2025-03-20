@@ -83,8 +83,8 @@ void MX_TIM2_Init(void)
   /* USER CODE BEGIN TIM2_Init 1 */
 
 // 修改预分频器和周期设置
-htim2.Init.Prescaler = 7199; // 72 MHz 时钟，分频到 10 kHz (0.1 ms)
-htim2.Init.Period = 19999;   // 20 ms 周期 (对应舵机 PWM)
+htim2.Init.Prescaler = 71;   // 72 MHz 时钟，分频到 1 MHz (1 us 分辨率)
+htim2.Init.Period = 20000;   // 20 ms 周期 (对应舵机 PWM)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
