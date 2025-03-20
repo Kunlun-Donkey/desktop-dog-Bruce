@@ -114,7 +114,7 @@ int main(void)
 
   /* USER CODE BEGIN Demo */
   // 显示图片
-  OLED_ShowImage(0, 2, image_data, 128, 64);
+  //OLED_ShowImage(0, 2, image_data, 128, 64);
 
   // 显示GIF
   // OLED_ShowGIF(gif_frames, 2, 128, 64, 500);
