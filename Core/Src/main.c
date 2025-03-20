@@ -94,6 +94,8 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_USART1_UART_Init();
+  MX_USART3_UART_Init(); // 初始化 UART3
+
   /* USER CODE BEGIN 2 */
   OLED_Init();
   OLED_Clear();
@@ -107,6 +109,8 @@ int main(void)
   Servo_SetAngle(&htim2, TIM_CHANNEL_2, 45);
   Servo_SetAngle(&htim2, TIM_CHANNEL_3, 135);
   Servo_SetAngle(&htim2, TIM_CHANNEL_4, 180);
+
+  printf("UART3 initialized successfully!\r\n");
 
   /* USER CODE BEGIN Demo */
   // 显示图片
