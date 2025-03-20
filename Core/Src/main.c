@@ -167,11 +167,11 @@ int main(void)
   * @brief System Clock Configuration
   * @retval None
   */
-  void SystemClock_Config(void)
-  {
+void SystemClock_Config(void)
+{
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  
+
     /** 使能 HSE 并配置 PLL */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -180,9 +180,9 @@ int main(void)
     RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;  // 8MHz * 9 = 72MHz
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
-      Error_Handler();
+        Error_Handler();
     }
-  
+
     /** 配置系统时钟、AHB、APB 时钟 */
     RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                                 |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -190,13 +190,12 @@ int main(void)
     RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;  
     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;   // APB1 最大 36MHz
     RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;   // APB2 最高 72MHz
-  
+
     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
     {
-      Error_Handler();
+        Error_Handler();
     }
-  }
-  
+}
 
 /* USER CODE BEGIN 4 */
 
