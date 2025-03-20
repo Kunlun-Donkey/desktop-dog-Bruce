@@ -82,14 +82,14 @@ void MX_TIM2_Init(void)
 
   /* USER CODE BEGIN TIM2_Init 1 */
 
-
+// 修改预分频器和周期设置
+htim2.Init.Prescaler = 7199; // 72 MHz 时钟，分频到 10 kHz (0.1 ms)
+htim2.Init.Period = 19999;   // 20 ms 周期 (对应舵机 PWM)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
 
-  // 确保预分频器和周期设置正确
-  htim2.Init.Prescaler = 7999; // 8 MHz 时钟，分频到 1 kHz (1 ms)
-  htim2.Init.Period = 19999;   // 20 ms 周期 (对应舵机 PWM)
+  // 删除重复的 Prescaler 设置
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

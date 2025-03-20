@@ -121,6 +121,39 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    for (uint8_t angle = 0; angle <= 180; angle += 10) {
+        // 设置舵机角度
+        Servo_SetAngle(&htim2, TIM_CHANNEL_1, angle);
+        Servo_SetAngle(&htim2, TIM_CHANNEL_2, angle);
+        Servo_SetAngle(&htim2, TIM_CHANNEL_3, angle);
+        Servo_SetAngle(&htim2, TIM_CHANNEL_4, angle);
+
+        // 在 OLED 上显示当前角度
+        OLED_Clear();
+        char angleStr[16];
+        snprintf(angleStr, sizeof(angleStr), "Angle: %d", angle);
+        OLED_ShowString(0, 0, angleStr);
+
+        // 延迟一段时间
+        HAL_Delay(500);
+    }
+
+    for (uint8_t angle = 180; angle > 0; angle -= 10) {
+        // 设置舵机角度
+        Servo_SetAngle(&htim2, TIM_CHANNEL_1, angle);
+        Servo_SetAngle(&htim2, TIM_CHANNEL_2, angle);
+        Servo_SetAngle(&htim2, TIM_CHANNEL_3, angle);
+        Servo_SetAngle(&htim2, TIM_CHANNEL_4, angle);
+
+        // 在 OLED 上显示当前角度
+        OLED_Clear();
+        char angleStr[16];
+        snprintf(angleStr, sizeof(angleStr), "Angle: %d", angle);
+        OLED_ShowString(0, 0, angleStr);
+
+        // 延迟一段时间
+        HAL_Delay(500);
+    }
     /* USER CODE END WHILE */
 
     /* Test GPIOB0 LED, Set hight level */
@@ -134,37 +167,36 @@ int main(void)
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI; // 使用内部高速时钟 (HSI)
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;                  // 开启 HSI
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;            // 未启用 PLL
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  void SystemClock_Config(void)
   {
-    Error_Handler();
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  
+    /** 使能 HSE 并配置 PLL */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;  // 8MHz * 9 = 72MHz
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+      Error_Handler();
+    }
+  
+    /** 配置系统时钟、AHB、APB 时钟 */
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                                |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;  
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;   // APB1 最大 36MHz
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;   // APB2 最高 72MHz
+  
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+    {
+      Error_Handler();
+    }
   }
-
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;    // 系统时钟源为 HSI
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;        // AHB 时钟不分频
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;         // APB1 时钟不分频
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;         // APB2 时钟不分频
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
+  
 
 /* USER CODE BEGIN 4 */
 
