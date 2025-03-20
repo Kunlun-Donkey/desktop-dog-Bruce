@@ -23,6 +23,7 @@
 #include "gpio.h"
 #include "oled_images.h"
 #include "servo.h"
+#include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -117,6 +118,9 @@ int main(void)
 
   /* USER CODE END 2 */
 
+  /* 打印初始化完成日志 */
+  printf("System initialized successfully!\r\n");
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -158,6 +162,10 @@ int main(void)
 
     /* Test GPIOB0 LED, Set hight level */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
+
+    // 打印循环日志
+    printf("Main loop running...\r\n");
+    HAL_Delay(1000); // 延迟 1 秒
     /* USER CODE END 3 */
   }
   /* USER CODE END 3 */
