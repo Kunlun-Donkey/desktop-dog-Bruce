@@ -127,39 +127,50 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    for (uint8_t angle = 0; angle <= 180; angle += 10) {
-        // 设置舵机角度
-        Servo_SetAngle(&htim2, TIM_CHANNEL_1, angle);
-        Servo_SetAngle(&htim2, TIM_CHANNEL_2, angle);
-        Servo_SetAngle(&htim2, TIM_CHANNEL_3, angle);
-        Servo_SetAngle(&htim2, TIM_CHANNEL_4, angle);
+    // 渐亮
+    for (uint16_t pulse = 0; pulse <= htim2.Init.Period; pulse += 100) {
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulse);
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, pulse / 2); // 示例：通道 2 为通道 1 的一半
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, pulse / 3); // 示例：通道 3 为通道 1 的三分之一
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, pulse / 4); // 示例：通道 4 为通道 1 的四分之一
 
-        // 在 OLED 上显示当前角度
+        // 更新 OLED 显示
         OLED_Clear();
-        char angleStr[16];
-        snprintf(angleStr, sizeof(angleStr), "Angle: %d", angle);
-        OLED_ShowString(0, 0, angleStr);
+        char buffer[16];
+        snprintf(buffer, sizeof(buffer), "CH1: %4d", pulse);
+        OLED_ShowString(0, 0, buffer);
+        snprintf(buffer, sizeof(buffer), "CH2: %4d", pulse / 2);
+        OLED_ShowString(0, 2, buffer);
+        snprintf(buffer, sizeof(buffer), "CH3: %4d", pulse / 3);
+        OLED_ShowString(0, 4, buffer);
+        snprintf(buffer, sizeof(buffer), "CH4: %4d", pulse / 4);
+        OLED_ShowString(0, 6, buffer);
 
-        // 延迟一段时间
-        HAL_Delay(500);
+        HAL_Delay(10); // 延迟 10ms
     }
 
-    for (uint8_t angle = 180; angle >= 10; angle -= 10) {
-        // 设置舵机角度
-        Servo_SetAngle(&htim2, TIM_CHANNEL_1, angle);
-        Servo_SetAngle(&htim2, TIM_CHANNEL_2, angle);
-        Servo_SetAngle(&htim2, TIM_CHANNEL_3, angle);
-        Servo_SetAngle(&htim2, TIM_CHANNEL_4, angle);
+    // 渐暗
+    for (uint16_t pulse = htim2.Init.Period; pulse > 0; pulse -= 100) {
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulse);
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, pulse / 2);
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, pulse / 3);
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, pulse / 4);
 
-        // 在 OLED 上显示当前角度
+        // 更新 OLED 显示
         OLED_Clear();
-        char angleStr[16];
-        snprintf(angleStr, sizeof(angleStr), "Angle: %d", angle);
-        OLED_ShowString(0, 0, angleStr);
+        char buffer[16];
+        snprintf(buffer, sizeof(buffer), "CH1: %4d", pulse);
+        OLED_ShowString(0, 0, buffer);
+        snprintf(buffer, sizeof(buffer), "CH2: %4d", pulse / 2);
+        OLED_ShowString(0, 2, buffer);
+        snprintf(buffer, sizeof(buffer), "CH3: %4d", pulse / 3);
+        OLED_ShowString(0, 4, buffer);
+        snprintf(buffer, sizeof(buffer), "CH4: %4d", pulse / 4);
+        OLED_ShowString(0, 6, buffer);
 
-        // 延迟一段时间
-        HAL_Delay(500);
+        HAL_Delay(10); // 延迟 10ms
     }
+
     /* USER CODE END WHILE */
 
     /* Test GPIOB0 LED, Set hight level */
