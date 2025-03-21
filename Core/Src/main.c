@@ -108,12 +108,6 @@ int main(void)
   // 初始化舵机
   Servo_Init();
 
-  // 设置舵机角度
-  Servo_SetAngle(&htim2, TIM_CHANNEL_1, 90);
-  Servo_SetAngle(&htim2, TIM_CHANNEL_2, 45);
-  Servo_SetAngle(&htim2, TIM_CHANNEL_3, 135);
-  Servo_SetAngle(&htim2, TIM_CHANNEL_4, 180);
-
   printf("UART3 initialized successfully!\r\n");
 
   /* USER CODE BEGIN Demo */
@@ -150,7 +144,7 @@ int main(void)
         HAL_Delay(500);
     }
 
-    for (uint8_t angle = 180; angle > 0; angle -= 10) {
+    for (uint8_t angle = 180; angle >= 10; angle -= 10) {
         // 设置舵机角度
         Servo_SetAngle(&htim2, TIM_CHANNEL_1, angle);
         Servo_SetAngle(&htim2, TIM_CHANNEL_2, angle);
