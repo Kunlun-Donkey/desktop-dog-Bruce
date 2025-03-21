@@ -21,6 +21,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "oled.h"
 #include "oled_images.h"
 #include "servo.h"
 #include "usart.h"
@@ -36,6 +37,7 @@
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
+#define USE_HSE_CLOCK 1 // 1: 使用外部 HSE 时钟（72MHz），0: 使用内部 HSI 时钟（8MHz）
 /* USER CODE BEGIN PD */
 
 /* USER CODE END PD */
@@ -53,6 +55,8 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void SystemClock_Config_HSE(void);
+void SystemClock_Config_HSI(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -176,37 +180,84 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
+  * @brief 配置外部 HSE 时钟（72MHz）
   * @retval None
   */
-void SystemClock_Config(void)
+void SystemClock_Config_HSE(void)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-    /** 使能 HSE 并配置 PLL */
+    /** 配置外部 HSE 时钟并启用 PLL */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;  // 8MHz * 9 = 72MHz
+    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9; // 8MHz * 9 = 72MHz
+
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
         Error_Handler();
     }
 
-    /** 配置系统时钟、AHB、APB 时钟 */
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                                |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;  
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;   // APB1 最大 36MHz
-    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;   // APB2 最高 72MHz
+    /** 配置系统时钟、AHB 和 APB 时钟 */
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK |
+                                  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK; // 使用 PLL 时钟作为系统时钟
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;        // AHB 时钟不分频
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;         // APB1 最大 36MHz
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;         // APB2 最大 72MHz
 
     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
     {
         Error_Handler();
     }
+}
+
+/**
+  * @brief 配置内部 HSI 时钟（8MHz）
+  * @retval None
+  */
+void SystemClock_Config_HSI(void)
+{
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+    /** 配置内部 HSI 时钟 */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+    RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_OFF; // 不使用 PLL，直接使用 HSI
+
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    /** 配置系统时钟、AHB 和 APB 时钟 */
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK |
+                                  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;    // 使用 HSI 时钟作为系统时钟
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;        // AHB 时钟不分频
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;         // APB1 不分频
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;         // APB2 不分频
+
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+    {
+        Error_Handler();
+    }
+}
+
+/**
+  * @brief 根据宏定义选择时钟配置
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+#if USE_HSE_CLOCK
+    SystemClock_Config_HSE();
+#else
+    SystemClock_Config_HSI();
+#endif
 }
 
 /* USER CODE BEGIN 4 */
